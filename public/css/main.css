@@ -1,1 +1,16 @@
-hello
+body {
+    background-color: palevioletred;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+
+.index_form{
+    background-color: white;
+    color: palevioletred;
+    display: flex;
+    flex-direction: row;
+    align-self: center;
+    justify-content: center;
+}
