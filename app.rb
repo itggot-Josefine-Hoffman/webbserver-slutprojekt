@@ -89,5 +89,4 @@ class App < Sinatra::Base
 		session[:user_id] = nil
 		redirect("/")
 	end
-
 end           
