@@ -1,11 +1,11 @@
 class App < Sinatra::Base
 	enable :sessions
 
-	get '/' do
+	get ('/') do
 		db = SQLite3::Database.new("db/db.db")
 		slim(:index, locals:{msg: session[:msg]})
 	end
-	post '/register' do
+	post ('/register' ) do
 		db = SQLite3::Database.new("db/db.db")
 		username = params[:username]
 		password = BCrypt::Password.create( params[:password] )
@@ -55,20 +55,21 @@ class App < Sinatra::Base
 	get('/user') do
 		db = SQLite3::Database.new("db/db.db")
 		if session[:user_id]
-			ovningar = db.execute("SELECT ovning, reps, sets, day, id FROM ovningar WHERE user_id=?", session[:user_id])
 			username = db.execute("SELECT user FROM user_data WHERE id=?", session[:user_id])
-			slim(:user, locals:{ovningar: ovningar, username:username})
+			notes = db.execute("SELECT content id FROM notes WHERE user_id=?", session[:user_id])
+			slim(:user, locals:{notes: notes, username:username})
 		else 
 			session[:msg] = "Login or register to access this page."
 			redirect('/')
 		end
 	end
+
 	get('/main') do
 		db = SQLite3::Database.new("db/db.db")
 		if session[:user_id]
-			ovningar = db.execute("SELECT ovning, reps, sets, day, id FROM ovningar WHERE user_id=?", session[:user_id])
 			username = db.execute("SELECT user FROM user_data WHERE id=?", session[:user_id])
-			slim(:mainsite, locals:{ovningar: ovningar, username:username})
+			notes = db.execute("SELECT content id FROM notes WHERE user_id=?", session[:user_id])
+			slim(:mainsite, locals:{notes: notes, username:username})
 		else 
 			session[:msg] = "Login or register to access this page."
 			redirect('/')
