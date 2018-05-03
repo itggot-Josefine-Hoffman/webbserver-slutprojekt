@@ -56,7 +56,7 @@ class App < Sinatra::Base
 		db = SQLite3::Database.new("db/db.db")
 		if session[:user_id]
 			username = db.execute("SELECT user FROM user_data WHERE id=?", session[:user_id])
-			notes = db.execute("SELECT content id FROM notes WHERE user_id=?", session[:user_id])
+			notes = db.execute("SELECT content, id FROM notes WHERE user_id=?", session[:user_id])
 			slim(:user, locals:{notes: notes, username:username})
 		else 
 			session[:msg] = "Login or register to access this page."
@@ -74,6 +74,20 @@ class App < Sinatra::Base
 			session[:msg] = "Login or register to access this page."
 			redirect('/')
 		end
+	end
+	post("/add_note") do
+		db = SQLite3::Database.new("db/db.db")
+		db.execute("INSERT INTO notes(user_id, content) VALUES(?,?)", [session[:user_id], params[:content]] )
+		redirect("/user")
+	end
+	post('/delete_note') do
+		db = SQLite3::Database.new('db/db.db')
+		db.execute("DELETE FROM notes WHERE id=?", params[:id])
+		redirect('/user')
+	end
+	get('/logout') do
+		session[:user_id] = nil
+		redirect("/")
 	end
 
 end           

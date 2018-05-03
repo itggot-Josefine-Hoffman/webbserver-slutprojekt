@@ -1,0 +1,17 @@
+.klickahar  
+    p Lägg till en note
+
+.notes 
+    -notes.each do |note|
+        .note
+            p.notis = note[0]
+            form action="/delete_note" class="delete" method="post"
+                input type="hidden" name="id" value="#{note[1]}"/
+                input type="submit" value="x"/
+.visa_detta
+    form action="/add_note" method="post"
+        input type="text" name="content"
+        input type="submit" value="lägg till"/
+
+.loggaut 
+    a.logga href="/logout" Logout
