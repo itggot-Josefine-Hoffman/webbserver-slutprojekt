@@ -65,8 +65,8 @@ class App < Sinatra::Base
 	end
 
 	get('/main') do
-		db = SQLite3::Database.new("db/db.db")
 		if session[:user_id]
+			db = SQLite3::Database.new("db/db.db")
 			username = db.execute("SELECT user FROM user_data WHERE id=?", session[:user_id])
 			notes = db.execute("SELECT content id FROM notes WHERE user_id=?", session[:user_id])
 			slim(:mainsite, locals:{notes: notes, username:username})
@@ -82,7 +82,7 @@ class App < Sinatra::Base
 	end
 	post('/delete_note') do
 		db = SQLite3::Database.new('db/db.db')
-		db.execute("DELETE FROM notes WHERE id=?", params[:id])
+		db.execute("DELETE FROM notes WHERE user_id=? AND id=?", [session[:user_id], params[:id]])
 		redirect('/user')
 	end
 	get('/logout') do
